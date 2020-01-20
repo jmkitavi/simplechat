@@ -7,9 +7,11 @@ import {
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import { NavigationActions } from 'react-navigation'
+import ChatItem from './ChatItem'
 
 const Home = () => {
   const [user, setUser] = useState(null)
+  const [chatList, setChatList] = useState(null)
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -18,8 +20,27 @@ const Home = () => {
       }
 
       setUser(user)
+
+      if (!chatList) {
+        fetchChatList(user.uid)
+      }
     })
   })
+
+  fetchChatList = (uid) => {
+    firebase.database().ref(`membership/` + uid).orderByChild('lastMessageAt').on('value', (snapshot) => {
+      let chatList =  Object.values(snapshot.val()).reverse()
+      setChatList(chatList)
+    })
+  }
+
+  renderChatList = (chatList) => {
+    if(!chatList) return fetchChatList(user.uid)
+
+    return chatList.map((chat) =>
+      <ChatItem conversationId={chat.conversationId} />
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -29,9 +50,13 @@ const Home = () => {
       <View>
         <Text>{`Email: ${user.email}`}</Text>
         <Text>{`Unique Identifier: ${user.uid}`}</Text>
-      </View>
 
+        <View style={{ marginTop: 10 }}>
+          {renderChatList(chatList)}
+        </View>
+      </View>
       )}
+
     </View>
   )
 }
