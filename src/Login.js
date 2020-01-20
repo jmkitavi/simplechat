@@ -77,6 +77,7 @@ const Login = () => {
           placeholder="Email Address"
           style={styles.input}
           onChangeText={(text) => setEmail(text)}
+          value={email}
         />
       </View>
 
@@ -85,6 +86,8 @@ const Login = () => {
           placeholder="Password"
           style={styles.input}
           onChangeText={(text) => setPassword(text)}
+          value={password}
+          secureTextEntry
         />
       </View>
 
