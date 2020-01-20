@@ -5,6 +5,7 @@ import {
   StatusBar,
   View,
 } from 'react-native'
+import firebase from 'react-native-firebase'
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -14,8 +15,14 @@ class AuthLoadingScreen extends React.Component {
   }
 
   _bootstrapAsync = async () => {
-    const userToken = false
-    this.props.navigation.navigate(userToken ? 'Home' : 'Login')
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        return this.props.navigation.navigate('Home')
+      }
+
+      return this.props.navigation.navigate('Login')
+    })
+
   }
 
   render() {
