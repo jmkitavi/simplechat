@@ -9,7 +9,7 @@ import firebase from 'react-native-firebase'
 import { NavigationActions } from 'react-navigation'
 import ChatItem from './ChatItem'
 
-const Home = () => {
+const ChatList = () => {
   const [user, setUser] = useState(null)
   const [chatList, setChatList] = useState(null)
 
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Home
+export default ChatList

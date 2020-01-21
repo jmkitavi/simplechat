@@ -19,7 +19,7 @@ const Login = () => {
     if (email !== '' && password !== '') {
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
-          return NavigationActions.navigate("Home", { user })
+          return NavigationActions.navigate("MainNav", { user })
         })
         .catch((error) => {
           // if no user create one
@@ -31,7 +31,7 @@ const Login = () => {
             )
             return firebase.auth().createUserWithEmailAndPassword(email, password)
               .then((user) => {
-                return NavigationActions.navigate("Home", { user })
+                return NavigationActions.navigate("MainNav", { user })
               })
               .catch((error) => {
                 ToastAndroid.showWithGravityAndOffset(
@@ -61,13 +61,13 @@ const Login = () => {
           onPress: () => {
             firebase.auth().signInAnonymously()
               .then((user) => {
-                NavigationActions.navigate("Home", { user })
+                NavigationActions.navigate("MainNav", { user })
               })
           }
         },
       ],
       {cancelable: false},
-    );
+    )
   }
 
   return (

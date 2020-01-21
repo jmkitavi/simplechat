@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import firebase from 'react-native-firebase'
-import { NavigationActions } from 'react-navigation'
+import NavigationService from './NavigationService'
 
 const ChatItem = ({ conversationId }) => {
   const [conversation, setConversation] = useState(null)
@@ -29,7 +29,10 @@ const ChatItem = ({ conversationId }) => {
   }
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => NavigationService.navigate('ChatThread')}
+    >
       <Text>{conversation.lastMessage}</Text>
     </TouchableOpacity>
   )

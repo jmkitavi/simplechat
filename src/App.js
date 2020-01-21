@@ -1,17 +1,30 @@
 import React from 'react'
-import AuthLoading from './AuthLoading'
-import Home from './Home'
-import Login from './Login'
+import { KeyboardAvoidingView } from 'react-native'
 import { createAppContainer } from 'react-navigation'
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch'
 import { Transition } from 'react-native-reanimated'
+import { createStackNavigator } from 'react-navigation-stack'
+import AuthLoading from './AuthLoading'
+import ChatList from './ChatList'
+import Login from './Login'
+import ChatThread from './ChatThread'
+import NavigationService from './NavigationService'
 
-
-const AuthNav = createAnimatedSwitchNavigator(
+const MainNav = createStackNavigator(
   {
-    AuthLoading: AuthLoading,
-    Home: Home,
-    Login: Login,
+    ChatList,
+    ChatThread,
+  },
+  {
+    initialRouteName: 'ChatList',
+  }
+)
+
+const SwitchNav = createAnimatedSwitchNavigator(
+  {
+    AuthLoading,
+    MainNav,
+    Login,
   },
   {
     initialRouteName: 'AuthLoading',
@@ -28,6 +41,22 @@ const AuthNav = createAnimatedSwitchNavigator(
       </Transition.Together>
     ),
   }
-);
+)
 
-export default createAppContainer(AuthNav)
+const AppNav = createAppContainer(SwitchNav)
+
+class App extends React.Component {
+  render() {
+    return (
+      <KeyboardAvoidingView enabled style={{ flex: 1 }}>
+        <AppNav
+          ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef)
+          }}
+        />
+      </KeyboardAvoidingView>
+    )
+  }
+}
+
+export default App
