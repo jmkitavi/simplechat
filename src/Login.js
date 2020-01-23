@@ -30,8 +30,14 @@ const Login = () => {
               0, 100
             )
             return firebase.auth().createUserWithEmailAndPassword(email, password)
-              .then((user) => {
-                return NavigationActions.navigate("MainNav", { user })
+              .then((res) => {
+                firebase.database().ref('users/' + res.user.uid).set({
+                  email: res.user.email,
+                  isAnonymous: res.user.isAnonymous,
+                  uid: res.user.uid,
+                })
+
+                return NavigationActions.navigate("MainNav")
               })
               .catch((error) => {
                 ToastAndroid.showWithGravityAndOffset(
