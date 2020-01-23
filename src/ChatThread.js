@@ -34,6 +34,13 @@ const ChatThread = () => {
 
         // load messages from chat list
         if (conversationId && gMessages.length === 0) {
+          // get recepientId
+          firebase.database().ref('conversations/' + conversationId).on('value', (snapshot) => {
+            const members = Object.values(snapshot.val().members)
+            members.map(member => {
+              if (member.id !== user.uid)  setRecepientId(member.id)
+            })
+          })
           return fetchMessages(conversationId)
         }
 
