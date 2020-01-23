@@ -33,7 +33,7 @@ const ChatItem = ({ conversationId }) => {
       style={styles.container}
       onPress={() => NavigationService.navigate('ChatThread', { conversationId })}
     >
-      <Text>{conversation.lastMessage}</Text>
+      <Text>{conversation.lastMessage.text}</Text>
     </TouchableOpacity>
   )
 }

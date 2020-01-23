@@ -7,10 +7,12 @@ import {
 import { NavigationContext } from 'react-navigation'
 import firebase from 'react-native-firebase'
 import { GiftedChat } from 'react-native-gifted-chat'
+import NavigationService from './NavigationService'
 
 const ChatThread = () => {
   const navigation = useContext(NavigationContext);
-  const conversationId = navigation.getParam('conversationId', null)
+  const [conversationId, setConversationId] = useState(navigation.getParam('conversationId', null))
+  const [recepientId, setRecepientId] = useState(navigation.getParam('recepientId', null))
   const [gMessages, setGMessages] = useState([])
   const [user, setUser] = useState(null)
 
@@ -18,12 +20,26 @@ const ChatThread = () => {
     if (!user) {
       firebase.auth().onAuthStateChanged((user) => {
         setUser(user)
+
+        // load messages if any, from user list
+        if (recepientId) {
+          firebase.database().ref(`membership/${user.uid}`).orderByChild('receiverId').equalTo(recepientId).on('value', (snapshot) => {
+            if (snapshot.val()) {
+              const membership = Object.values(snapshot.val())[0]
+              setConversationId(membership.conversationId)
+              return fetchMessages(membership.conversationId)
+            }
+          })
+        }
+
+        // load messages from chat list
+        if (conversationId && gMessages.length === 0) {
+          return fetchMessages(conversationId)
+        }
+
       })
     }
 
-    if (conversationId && gMessages.length === 0) {
-      fetchMessages(conversationId)
-    }
   })
 
   fetchMessages = (conversationId) => {
@@ -36,20 +52,30 @@ const ChatThread = () => {
   }
 
   createChat = (messages) => {
+    // creating chat without recepientId return UserList TODO: show Error
+    if (!recepientId) return NavigationService.navigate("UserList")
+
     // create conversation
     firebase.database().ref('conversations/').push({
       lastUpdatedAt: new Date().getTime(),
-      lastMessage: messages[0].text,
+      lastMessage: messages[0],
     })
       .then(conversation => {
-        console.log('create conver HAPA', conversation)
         // add conversation members
         firebase.database().ref(`conversations/${conversation.key}/members`).push({ id: user.uid })
+        firebase.database().ref(`conversations/${conversation.key}/members`).push({ id: recepientId })
 
         // create membership to conversation
         firebase.database().ref('membership/'+ user.uid).push({
           conversationId: conversation.key,
           lastMessageAt: new Date().getTime(),
+          receiverId: recepientId
+        })
+
+        firebase.database().ref('membership/'+ recepientId).push({
+          conversationId: conversation.key,
+          lastMessageAt: new Date().getTime(),
+          receiverId: user.uid
         })
 
         // save message
@@ -72,8 +98,13 @@ const ChatThread = () => {
 
     firebase.database().ref('conversations/' + conversationId).update({
       lastUpdatedAt: new Date().getTime(),
-      lastMessage: messages[0].text,
+      lastMessage: {
+        text: messages[0].text,
+        createdAt: new Date(messages[0].createdAt).getTime(),
+        user: { _id: user.uid }
+      }
     })
+
   }
 
   if (!user) {
