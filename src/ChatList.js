@@ -29,8 +29,10 @@ const ChatList = () => {
 
   fetchChatList = (uid) => {
     firebase.database().ref(`membership/` + uid).orderByChild('lastMessageAt').on('value', (snapshot) => {
-      let chatList =  Object.values(snapshot.val()).reverse()
-      setChatList(chatList)
+      if (snapshot.val()) {
+        let chatList =  Object.values(snapshot.val()).reverse()
+        setChatList(chatList)
+      }
     })
   }
 
