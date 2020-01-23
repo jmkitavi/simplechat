@@ -66,8 +66,14 @@ const Login = () => {
         { text: 'Continue',
           onPress: () => {
             firebase.auth().signInAnonymously()
-              .then((user) => {
-                NavigationActions.navigate("MainNav", { user })
+              .then((res) => {
+                firebase.database().ref('users/' + res.user.uid).set({
+                  email: res.user.email,
+                  isAnonymous: res.user.isAnonymous,
+                  uid: res.user.uid,
+                })
+
+                NavigationActions.navigate("MainNav")
               })
           }
         },

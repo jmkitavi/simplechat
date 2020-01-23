@@ -8,12 +8,14 @@ import AuthLoading from './AuthLoading'
 import ChatList from './ChatList'
 import Login from './Login'
 import ChatThread from './ChatThread'
+import UserList from './UserList'
 import NavigationService from './NavigationService'
 
 const MainNav = createStackNavigator(
   {
     ChatList,
     ChatThread,
+    UserList,
   },
   {
     initialRouteName: 'ChatList',
