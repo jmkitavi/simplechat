@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import { NavigationActions } from 'react-navigation'
@@ -42,7 +43,10 @@ const ChatList = () => {
     if(!chatList) return fetchChatList(user.uid)
 
     return chatList.map((chat) =>
-      <ChatItem conversationId={chat.conversationId} key={chat.conversationId} />
+      <ChatItem
+        chat={chat}
+        key={chat.conversationId}
+      />
     )
   }
 
@@ -52,17 +56,19 @@ const ChatList = () => {
         <ActivityIndicator />
       ) : (
       <View>
-        <Text>{`Email: ${user.email ? user.email : 'Anon User'}`}</Text>
-        <Text>{`Unique Identifier: ${user.uid}`}</Text>
-        <TouchableOpacity
-          onPress={() => NavigationService.navigate('UserList')}
-          style={styles.createButton}
-        >
-          <Text>CREATE CHAT</Text>
-        </TouchableOpacity>
-
-        <View style={{ marginTop: 10 }}>
+        <ScrollView>
           {renderChatList(chatList)}
+        </ScrollView>
+
+        <View style={{ bottom: 5, alignContent: 'center', alignItems: 'center' }}>
+          <TouchableOpacity
+            onPress={() => NavigationService.navigate('UserList')}
+            style={styles.createButton}
+          >
+            <Text>CREATE CHAT</Text>
+          </TouchableOpacity>
+          <Text>{`Logged In as: ${user.email ? user.email : 'Anon User'}`}</Text>
+          <Text>{`Unique Identifier: ${user.uid}`}</Text>
         </View>
       </View>
       )}
@@ -75,11 +81,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#E8E8E8',
   },
   createButton:{
     alignSelf: 'flex-end',
-    margin: 10,
+    marginVertical: 10,
     padding: 5,
     backgroundColor: 'grey',
     width: '30%',
