@@ -30,9 +30,9 @@ const ChatList = () => {
   })
 
   fetchChatList = (uid) => {
-    firebase.database().ref(`membership/` + uid).orderByChild('lastMessageAt').on('value', (snapshot) => {
+    firebase.database().ref(`membership/${uid}`).orderByChild('lastMessageAt').on('value', (snapshot) => {
       if (snapshot.val()) {
-        let chatList =  Object.values(snapshot.val()).reverse()
+        let chatList =  Object.values(snapshot.val()).sort((a, b) => a.lastMessageAt < b.lastMessageAt)
         setChatList(chatList)
       }
     })
@@ -42,7 +42,7 @@ const ChatList = () => {
     if(!chatList) return fetchChatList(user.uid)
 
     return chatList.map((chat) =>
-      <ChatItem conversationId={chat.conversationId} />
+      <ChatItem conversationId={chat.conversationId} key={chat.conversationId} />
     )
   }
 

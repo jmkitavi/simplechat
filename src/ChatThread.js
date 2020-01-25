@@ -73,13 +73,13 @@ const ChatThread = () => {
         firebase.database().ref(`conversations/${conversation.key}/members`).push({ id: recepientId })
 
         // create membership to conversation
-        firebase.database().ref('membership/'+ user.uid).push({
+        firebase.database().ref(`membership/${user.uid}/${conversation.key}`).set({
           conversationId: conversation.key,
           lastMessageAt: new Date().getTime(),
           receiverId: recepientId
         })
 
-        firebase.database().ref('membership/'+ recepientId).push({
+        firebase.database().ref(`membership/${recepientId}/${conversation.key}`).set({
           conversationId: conversation.key,
           lastMessageAt: new Date().getTime(),
           receiverId: user.uid
@@ -101,6 +101,15 @@ const ChatThread = () => {
       text: messages[0].text,
       createdAt: new Date(messages[0].createdAt).getTime(),
       user: { _id: user.uid }
+    })
+
+    // update memberships to conversation
+    firebase.database().ref(`membership/${user.uid}/${conversationId}`).update({
+      lastMessageAt: new Date().getTime(),
+    })
+
+    firebase.database().ref(`membership/${recepientId}/${conversationId}`).update({
+      lastMessageAt: new Date().getTime(),
     })
 
     firebase.database().ref('conversations/' + conversationId).update({
