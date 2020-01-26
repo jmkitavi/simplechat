@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import NavigationService from './NavigationService'
+import UserItem from './UserItem'
 
 const ChatList = () => {
   const [currentUser, setCurrentUser] = useState(null)
@@ -41,12 +42,7 @@ const ChatList = () => {
       if (user.uid === currentUser.uid) return null
 
       return (
-        <TouchableOpacity
-          style={styles.userItem}
-          onPress={() => NavigationService.navigate('ChatThread', { recepientId: user.uid })}
-        >
-          <Text>{user.email ? user.email : user.uid}</Text>
-        </TouchableOpacity>
+        <UserItem user={user} />
       )
     }
     )

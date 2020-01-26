@@ -19,6 +19,9 @@ const Login = () => {
     if (email !== '' && password !== '') {
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
+          firebase.database().ref('users/' + res.user.uid).update({
+            lastSeen: new Date()
+          })
           return NavigationActions.navigate("MainNav", { user })
         })
         .catch((error) => {
@@ -35,6 +38,7 @@ const Login = () => {
                   email: res.user.email,
                   isAnonymous: res.user.isAnonymous,
                   uid: res.user.uid,
+                  lastSeen: new Date()
                 })
 
                 return NavigationActions.navigate("MainNav")
