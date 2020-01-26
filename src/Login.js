@@ -18,11 +18,11 @@ const Login = () => {
   loginWithEmail = () => {
     if (email !== '' && password !== '') {
       firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((user) => {
+        .then((res) => {
           firebase.database().ref('users/' + res.user.uid).update({
             lastSeen: new Date()
           })
-          return NavigationActions.navigate("MainNav", { user })
+          return NavigationActions.navigate("MainNav")
         })
         .catch((error) => {
           // if no user create one
