@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   View,
-  ActivityIndicator,
   Text,
   TouchableOpacity,
   Image,
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import NavigationService from './NavigationService'
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder'
 
-const image = 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+const placeHolderImage = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
 
 const ChatItem = ({ chat }) => {
   const [conversation, setConversation] = useState(null)
@@ -30,7 +30,11 @@ const ChatItem = ({ chat }) => {
   if (!conversation || !receiver) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator />
+        <ShimmerPlaceHolder autoRun={true} style={styles.profile}/>
+        <View style={styles.content}>
+          <ShimmerPlaceHolder style={{ marginVertical: 5 }} autoRun={true}/>
+          <ShimmerPlaceHolder style={{ marginVertical: 5 }} autoRun={true}/>
+        </View>
       </View>
     )
   }
@@ -41,7 +45,7 @@ const ChatItem = ({ chat }) => {
       onPress={() => NavigationService.navigate('ChatThread', { conversationId: chat.conversationId })}
     >
       <Image
-        source={{ uri: image }}
+        source={{ uri: placeHolderImage }}
         style={styles.profile}
       />
       <View style={styles.content}>
