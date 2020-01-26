@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'row',
+    marginHorizontal: 15,
   },
   content: {
     flex: 1,
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    lineHeight: 20,
+    lineHeight: 25,
     fontWeight: 'bold',
   }
 })

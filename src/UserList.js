@@ -53,20 +53,9 @@ const ChatList = () => {
       {!currentUser ? (
         <ActivityIndicator />
       ) : (
-      <View>
-        <Text>{`Email: ${currentUser.email ? currentUser.email : 'Anon User'}`}</Text>
-        <Text>{`Unique Identifier: ${currentUser.uid}`}</Text>
-        <TouchableOpacity
-          onPress={() => NavigationService.navigate('ChatList')}
-          style={styles.createButton}
-        >
-          <Text>CHAT LIST</Text>
-        </TouchableOpacity>
+      <View style={{ marginTop: 10 }}>
 
-        <View style={{ marginTop: 10 }}>
-          {userList ? renderUserList(userList) : <ActivityIndicator />}
-        </View>
-
+        {userList ? renderUserList(userList) : <ActivityIndicator />}
 
       </View>
       )}
@@ -78,7 +67,6 @@ const ChatList = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     backgroundColor: '#E8E8E8',
   },
   createButton:{

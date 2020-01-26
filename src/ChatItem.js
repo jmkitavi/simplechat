@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'row',
+    marginHorizontal: 15,
   },
   content: {
     flex: 1,
@@ -69,14 +70,14 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
   },
   profile: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
-    marginRight: 10,
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    marginRight: 20,
   },
   name: {
-    fontSize: 16,
-    lineHeight: 20,
+    fontSize: 17,
+    lineHeight: 30,
     fontWeight: 'bold',
   }
 })

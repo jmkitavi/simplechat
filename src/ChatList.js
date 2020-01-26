@@ -11,6 +11,7 @@ import firebase from 'react-native-firebase'
 import { NavigationActions } from 'react-navigation'
 import ChatItem from './ChatItem'
 import NavigationService from './NavigationService'
+import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
 const ChatList = () => {
   const [user, setUser] = useState(null)
@@ -55,21 +56,59 @@ const ChatList = () => {
       {!user ? (
         <ActivityIndicator />
       ) : (
-      <View>
+      <View style={{ flex: 1 }}>
         <ScrollView>
           {renderChatList(chatList)}
+
+          <View style={{ margin: 50, flexDirection: 'row', justifyContent: 'space-around' }}>
+            <TouchableOpacity
+              style={styles.centerContent}
+              onPress={() => {}}
+            >
+              <View style={[styles.iconContainer, { backgroundColor: '#E8E8E8' }]}>
+                <MaterialCommunityIcons
+                  name='share-variant'
+                  size={30}
+                  color='black'
+                />
+              </View>
+              <Text style={{ textAlign: 'center', fontSize: 13, lineHeight: 30 }}>Share APP</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.centerContent}
+              onPress={() => {}}
+            >
+              <View style={[styles.iconContainer, { backgroundColor: '#E8E8E8' }]}>
+                <MaterialCommunityIcons
+                  name='content-copy'
+                  size={30}
+                  color='black'
+                />
+              </View>
+              <Text style={{ textAlign: 'center', fontSize: 13, lineHeight: 30 }}>Copy UID</Text>
+            </TouchableOpacity>
+          </View>
+
         </ScrollView>
 
         <View style={{ bottom: 5, alignContent: 'center', alignItems: 'center' }}>
-          <TouchableOpacity
-            onPress={() => NavigationService.navigate('UserList')}
-            style={styles.createButton}
-          >
-            <Text>CREATE CHAT</Text>
-          </TouchableOpacity>
           <Text>{`Logged In as: ${user.email ? user.email : 'Anon User'}`}</Text>
-          <Text>{`Unique Identifier: ${user.uid}`}</Text>
         </View>
+
+        <TouchableOpacity
+          style={styles.chatButton}
+          onPress={() => NavigationService.navigate('UserList')}
+        >
+          <View style={styles.iconContainer}>
+            <MaterialCommunityIcons
+              name='message-plus'
+              size={30}
+              color='white'
+            />
+          </View>
+          <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 11, lineHeight: 20 }}>ADD CHAT</Text>
+        </TouchableOpacity>
       </View>
       )}
 
@@ -80,15 +119,29 @@ const ChatList = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
+  },
+  centerContent: {
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  createButton:{
-    alignSelf: 'flex-end',
-    marginVertical: 10,
-    padding: 5,
-    backgroundColor: 'grey',
-    width: '30%',
+  chatButton: {
+    position: "absolute",
+    right: 8,
+    bottom: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  iconContainer: {
+    elevation: 5,
+    backgroundColor: '#3366ff',
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
 })
 
 export default ChatList
